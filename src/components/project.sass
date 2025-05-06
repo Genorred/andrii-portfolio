@@ -1,0 +1,24 @@
+@supports (animation-timeline: view())
+  .project-container
+    @apply origin-top-left scroll-smooth snap-mandatory
+    animation: appearing cubic-bezier(0.1, 0.8, 0.7, 0.9) both
+    view-timeline-name: --project-container-view
+
+  .project-steps
+    scroll-snap-align: start
+    animation-name: appearing
+    animation-duration: 1ms
+    /* Required for some browsers */
+    animation-fill-mode: both
+    animation-timeline: --project-container-view
+
+  .project-steps:nth-child(n)
+
+@keyframes appearing
+  from
+    scale: 0
+
+  to
+    scale: 100%
+
+

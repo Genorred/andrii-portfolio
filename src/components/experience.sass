@@ -1,0 +1,12 @@
+@supports (animation-timeline: scroll())
+  .experience-background
+    animation: bluring cubic-bezier(0.1, 0.8, 0.7, 0.9) both
+    animation-timeline: view(20% 75%)
+
+
+@keyframes bluring
+  from
+    opacity: 100
+  to
+    opacity: 0
+
