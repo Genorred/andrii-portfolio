@@ -89,7 +89,7 @@ export const projects: {
         showcases: [
             {
                 title: 'In-depth authorization and authentication system',
-                videoUrl: ''
+                videoUrl: '/assets/PEPP/Auth.mp4'
             },
             {
                 title: 'Handy post creating flow',

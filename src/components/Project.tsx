@@ -2,7 +2,7 @@ import type {projects} from '@/lib/data';
 import {CardContent, CardFooter, CardHeader, CardTitle} from '@/shared/ui/card';
 import {GlassCard} from '@/shared/ui/glass-card';
 import React, {useEffect, useRef, useState} from 'react';
-import {motion, useMotionTemplate, useScroll, useSpring, useTransform} from "framer-motion";
+import {motion, useInView, useMotionTemplate, useScroll, useSpring, useTransform} from "framer-motion";
 import {Github, Youtube} from 'lucide-react';
 import {cn} from "@/lib/utils.ts";
 
@@ -66,8 +66,29 @@ const Project = ({project}: {
 
     const stepsTransition = useTransform(scrollYProgress, [0, step], [0, 1])
     const stepsSpring = useSpring(stepsTransition, {stiffness: 400})
-    stepsSpring.on('change', state => console.log(state))
+    // stepsSpring.on('change', state => console.log(state))
     const stepsTranslate = useMotionTemplate`scale(${stepsSpring}))`
+
+
+    const hiddenElementsHeight = 600
+    const hiddenElementsTotalHeight = project.showcases.length * hiddenElementsHeight
+
+    const stepsNavTransform = useTransform(scrollYProgress, [step * 2, 1], [0, -(1 / 3 * (project.showcases.length -1 ))])
+    const stepsNavSpring = useSpring(stepsNavTransform, {stiffness: 400})
+    const stepsNavTranslate = useMotionTemplate`calc((1/3 + ${stepsNavSpring}) * 100%)`
+
+    const stepsRef = useRef<HTMLDivElement>(null);
+    const isInView = useInView(stepsRef);
+    useEffect(() => {
+        console.log('in view', isInView)
+        const html = document.getElementsByTagName('html').item(0)
+        if (html) {
+            if (isInView)
+                html.style.scrollSnapType = 'y mandatory';
+            else
+                html.style.scrollSnapType = '';
+        }
+    }, [isInView]);
     return (
         <motion.div className={cn('relative flex gap-2 w-full mx-auto overflow-clip', {})} ref={ref} style={{
             maxWidth: containerSpring,
@@ -160,28 +181,49 @@ const Project = ({project}: {
                 </GlassCard>
             </div>
 
-            <div aria-hidden className='opacity-0 w-0'>
-                {
-                    project.showcases.map((showcase, index) => (
-                        <div className='h-[600px]' id={`${project.title}-${showcase.title.replace(/ /g, '-')}`}>
-                            DASH
-                        </div>
-                    ))
-                }
+            <div aria-hidden className='flex opacity-0 w-0'>
+                <div className='grow w-[1px] flex flex-col'>
+                    <div className='min-h-[50vh]'/>
+                    <div  ref={stepsRef} className='grow'/>
+                    <div className='min-h-screen'/>
+                </div>
+                <div>
+                    {
+                        project.showcases.map((showcase, index) => (
+                            <div style={{height: hiddenElementsHeight}} className='snap-center w-[1px]'
+                                 id={`${project.title}-${showcase.title.replace(/ /g, '-')}`}/>
+                        ))
+                    }
+                </div>
             </div>
             <motion.div
-                className='sticky top-22 max-h-[calc(100vh-7rem)] grow flex project-container origin-top-left bg-gradient-to-r from-purple-500/5 to-pink-500/5'
+                className='sticky overflow-clip top-22 max-h-[calc(100vh-7rem)] grow flex flex-col project-container origin-top-left bg-gradient-to-r from-purple-500/5 to-pink-500/5'
                 style={{
                     scale: stepsSpring
                 }}
             >
-                {
-                    project.showcases.map((showcase, index) => (
-                        <div className='h-[600px]'>
-                            DASH
-                        </div>
-                    ))
-                }
+                <nav className='w-full overflow-x-clip'>
+                    <motion.ul className='flex' style={{translateX: stepsNavTranslate}}>
+                        {
+                            project.showcases.map((showcase, index) => (
+                                <div className='min-w-1/3 flex justify-center '>
+                                    <li className='w-fit'>
+                                        The sommer has come
+                                    </li>
+                                </div>
+                            ))
+                        }
+                    </motion.ul>
+                </nav>
+                <ul>
+                    {
+                        project.showcases.map((showcase, index) => (
+                            <li className='h-[600px]'>
+                                DASH
+                            </li>
+                        ))
+                    }
+                </ul>
             </motion.div>
         </motion.div>
     );
