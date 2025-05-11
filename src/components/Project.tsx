@@ -4,7 +4,6 @@ import {GlassCard} from '@/shared/ui/glass-card';
 import React, {useEffect, useRef, useState} from 'react';
 import {motion, useInView, useMotionTemplate, useScroll, useSpring, useTransform} from "framer-motion";
 import {Github, Youtube} from 'lucide-react';
-import {cn} from "@/lib/utils.ts";
 
 const Project = ({project}: {
     project: typeof projects[number]
@@ -73,7 +72,7 @@ const Project = ({project}: {
     const hiddenElementsHeight = 600
     const hiddenElementsTotalHeight = project.showcases.length * hiddenElementsHeight
 
-    const stepsNavTransform = useTransform(scrollYProgress, [step * 2, 1], [0, -(1 / 3 * (project.showcases.length -1 ))])
+    const stepsNavTransform = useTransform(scrollYProgress, [step * 2, 1], [0, -(1 / 3 * (project.showcases.length - 1))])
     const stepsNavSpring = useSpring(stepsNavTransform, {stiffness: 400})
     const stepsNavTranslate = useMotionTemplate`calc((1/3 + ${stepsNavSpring}) * 100%)`
 
@@ -90,11 +89,11 @@ const Project = ({project}: {
         }
     }, [isInView]);
     return (
-        <motion.div className={cn('relative flex gap-2 w-full mx-auto overflow-clip', {})} ref={ref} style={{
+        <motion.div className='relative flex gap-2 w-full mx-auto overflow-clip' style={{
             maxWidth: containerSpring,
         }}>
             <div
-                className='h-fit w-96 sticky top-22'
+                className='h-fit min-w-96 sticky top-22'
             >
                 <GlassCard
                     className="group hover:scale-105 overflow-hidden dark:border-purple-500/10 h-full flex flex-col">
@@ -181,19 +180,22 @@ const Project = ({project}: {
                 </GlassCard>
             </div>
 
-            <div aria-hidden className='flex opacity-0 w-0'>
+            <div aria-hidden className='flex opacity-0 w-0' >
                 <div className='grow w-[1px] flex flex-col'>
                     <div className='min-h-[50vh]'/>
-                    <div  ref={stepsRef} className='grow'/>
-                    <div className='min-h-screen'/>
+                    <div ref={stepsRef} className='grow'/>
+                    <div className='min-h-[100vh]'/>
                 </div>
                 <div>
-                    {
-                        project.showcases.map((showcase, index) => (
-                            <div style={{height: hiddenElementsHeight}} className='snap-center w-[1px]'
-                                 id={`${project.title}-${showcase.title.replace(/ /g, '-')}`}/>
-                        ))
-                    }
+                    <div ref={ref}>
+                        {
+                            project.showcases.map((showcase, index) => (
+                                <div style={{height: hiddenElementsHeight}} className='snap-start w-[1px]'
+                                     id={`${project.title}-${showcase.title.replace(/ /g, '-')}`}/>
+                            ))
+                        }
+                    </div>
+                    <div className='h-[20vh]'/>
                 </div>
             </div>
             <motion.div
