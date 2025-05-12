@@ -1,99 +1,45 @@
 import type {projects} from '@/lib/data';
 import {CardContent, CardFooter, CardHeader, CardTitle} from '@/shared/ui/card';
 import {GlassCard} from '@/shared/ui/glass-card';
-import React, {useEffect, useRef, useState} from 'react';
-import {motion, useInView, useMotionTemplate, useScroll, useSpring, useTransform} from "framer-motion";
+import React from 'react';
+import {motion} from "framer-motion";
 import {Github, Youtube} from 'lucide-react';
+import {useElementSizes} from '@/hooks/useElementSizes';
+import {useScrollAnimations} from '@/hooks/useScrollAnimations';
+import {useStepsNavigation} from '@/hooks/useStepsNavigation';
 
 const Project = ({project}: {
     project: typeof projects[number]
 }) => {
-    const ref = useRef(null);
+    const {
+        descHeight,
+        navHeight,
+        descRef,
+        navRef,
+    } = useElementSizes();
 
-    const {scrollYProgress} = useScroll({
-        target: ref,
-        axis: 'y',
-        offset: ["start 0.35", "end end"],
-    });
-    // scrollYProgress.on('change', state => console.log(state));
-    const [descHeight, setDescHeight] = useState(0);
-    const [navHeight, setNavHeight] = useState(0);
-    const [containerWidth, setContainerWidth] = useState(0)
+    const step = 0.03;
+    const {
+        stepsScrollRef,
+        containerSpring,
+        infoCardHeightPx,
+        descTranslate,
+        navTranslate,
+        stepsSpring,
+        scrollYProgress
+    } = useScrollAnimations(descHeight, step, navHeight);
 
-    const descRef = useRef<HTMLUListElement>(null);
-    const navRef = useRef<HTMLElement>(null);
-    const containerRef = useRef<HTMLElement>(null);
+    const {
+        stepsRef,
+        stepsNavTranslate
+    } = useStepsNavigation(scrollYProgress, step, project.showcases.length);
 
-    // Измеряем высоты после рендера
-    useEffect(() => {
-        const getPixels = () => {
-            if (descRef.current) {
-                setDescHeight(descRef.current.getBoundingClientRect().height);
-            }
-            if (navRef.current) {
-                setNavHeight(navRef.current.getBoundingClientRect().height);
-            }
-            if (containerRef.current) {
-                setContainerWidth(containerRef.current.getBoundingClientRect().width);
-            }
-        }
-        getPixels()
-        document.body.addEventListener('resize', getPixels)
-        return () => {
-            document.body.removeEventListener('resize', getPixels)
-        }
-    }, []);
-    // scrollYProgress.on('change', state => console.log(state));
-
-    const swing = 50
-    const step = 0.03
-
-    const containerWidthTransform = useTransform(scrollYProgress, [0, step + 0.01], ['864px', '1280px'])
-    const containerSpring = useSpring(containerWidthTransform, {stiffness: 400})
-
-    const infoCardHeight = useTransform(scrollYProgress, [0, step], [descHeight, navHeight])
-    const infoCardSpring = useSpring(infoCardHeight, {stiffness: 400})
-    const infoCardHeightPx = useMotionTemplate`${infoCardSpring}px`
-
-    const descTransition = useTransform(scrollYProgress, [0, step], [swing, descHeight + swing])
-    const descSpring = useSpring(descTransition, {stiffness: 400})
-    const descTranslate = useMotionTemplate`translateY(calc(-${descSpring}px + ${swing}px))`
-
-    const navTransition = useTransform(scrollYProgress, [0, step], [swing, descHeight + swing])
-    const navSpring = useSpring(navTransition, {stiffness: 400})
-    const navTranslate = useMotionTemplate`translateY(calc(-${navSpring}px + ${swing}px))`
-
-    const stepsTransition = useTransform(scrollYProgress, [0, step], [0, 1])
-    const stepsSpring = useSpring(stepsTransition, {stiffness: 400})
-    // stepsSpring.on('change', state => console.log(state))
-    const stepsTranslate = useMotionTemplate`scale(${stepsSpring}))`
-
-
-    const hiddenElementsHeight = 600
-    const hiddenElementsTotalHeight = project.showcases.length * hiddenElementsHeight
-
-    const stepsNavTransform = useTransform(scrollYProgress, [step * 2, 1], [0, -(1 / 3 * (project.showcases.length - 1))])
-    const stepsNavSpring = useSpring(stepsNavTransform, {stiffness: 400})
-    const stepsNavTranslate = useMotionTemplate`calc((1/3 + ${stepsNavSpring}) * 100%)`
-
-    const stepsRef = useRef<HTMLDivElement>(null);
-    const isInView = useInView(stepsRef);
-    useEffect(() => {
-        console.log('in view', isInView)
-        const html = document.getElementsByTagName('html').item(0)
-        if (html) {
-            if (isInView)
-                html.style.scrollSnapType = 'y mandatory';
-            else
-                html.style.scrollSnapType = '';
-        }
-    }, [isInView]);
     return (
         <motion.div className='relative flex gap-2 w-full mx-auto overflow-clip' style={{
             maxWidth: containerSpring,
         }}>
             <div
-                className='h-fit min-w-96 sticky top-22'
+                className='h-fit min-w-96 w-96 sticky top-22'
             >
                 <GlassCard
                     className="group hover:scale-105 overflow-hidden dark:border-purple-500/10 h-full flex flex-col">
@@ -137,7 +83,7 @@ const Project = ({project}: {
                                     <ul className='flex flex-col gap-2'>
                                         {
                                             project.showcases.map(({title}, index) => (
-                                                <li className='line-clamp-1 cursor-pointer py-2'>
+                                                <li key={index} className='line-clamp-1 cursor-pointer py-2'>
                                                     <a href={`#${project.title}-${title.replace(/ /g, '-')}`}>
                                                         {title}
                                                     </a>
@@ -180,17 +126,17 @@ const Project = ({project}: {
                 </GlassCard>
             </div>
 
-            <div aria-hidden className='flex opacity-0 w-0' >
+            <div aria-hidden className='flex opacity-0 w-0'>
                 <div className='grow w-[1px] flex flex-col'>
                     <div className='min-h-[50vh]'/>
                     <div ref={stepsRef} className='grow'/>
                     <div className='min-h-[100vh]'/>
                 </div>
                 <div>
-                    <div ref={ref}>
+                    <div ref={stepsScrollRef}>
                         {
                             project.showcases.map((showcase, index) => (
-                                <div style={{height: hiddenElementsHeight}} className='snap-start w-[1px]'
+                                <div key={index} className='snap-start w-[1px] h-[600px]'
                                      id={`${project.title}-${showcase.title.replace(/ /g, '-')}`}/>
                             ))
                         }
@@ -205,14 +151,14 @@ const Project = ({project}: {
                 }}
             >
                 <nav className='w-full overflow-x-clip'>
-                    <motion.ul className='flex' style={{translateX: stepsNavTranslate}}>
+                    <motion.ul className='flex flex-nowrap' style={{translateX: stepsNavTranslate}}>
                         {
                             project.showcases.map((showcase, index) => (
-                                <div className='min-w-1/3 flex justify-center '>
-                                    <li className='w-fit'>
-                                        The sommer has come
-                                    </li>
-                                </div>
+                                <li key={index} className='relative min-w-1/3 w-1/3 max-w-1/3 overflow-hidden h-12'>
+                                    <span className='absolute px-3 w-full text-nowrap text-center overflow-hidden text-ellipsis'>
+                                        {showcase.title}
+                                    </span>
+                                </li>
                             ))
                         }
                     </motion.ul>
@@ -220,7 +166,7 @@ const Project = ({project}: {
                 <ul>
                     {
                         project.showcases.map((showcase, index) => (
-                            <li className='h-[600px]'>
+                            <li key={index} className='h-[600px]'>
                                 DASH
                             </li>
                         ))
