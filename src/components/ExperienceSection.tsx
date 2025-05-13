@@ -19,14 +19,14 @@ export default function ExperienceSection() {
         offset: ["start 1.2", "start start"],
     });
 
-    const opacity = useTransform(scrollYProgress, [0, 1], [1, 0], {
+    const opacity = useTransform(scrollYProgress, [0, 1], [1, 0.2], {
         ease: cubicBezier(0.1, 1, 0.5, 1)
     });
 
     return (
         <section
             id="experience"
-            className="py-12 bg-gradient-to-b from-muted/20 to-background"
+            className="py-12 bg-gradient-to-b from-muted/20 to-background snap-start"
         >
             <div className="container max-w-4xl mx-auto px-6 md:px-4">
                 <MotionWrapper>

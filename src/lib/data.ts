@@ -89,23 +89,23 @@ export const projects: {
         showcases: [
             {
                 title: 'In-depth authorization and authentication system',
-                videoUrl: '/assets/PEPP/Auth.mp4'
+                videoUrl: '/showcases/PEPP/Auth.mp4'
             },
             {
                 title: 'Handy post creating flow',
-                videoUrl: ''
+                videoUrl: '/showcases/PEPP/Creating.mp4'
             },
             {
                 title: 'Wide editor',
-                videoUrl: '/assets/PEPP/Editor.mp4'
+                videoUrl: '/showcases/PEPP/Editor.mp4'
             },
             {
                 title: 'Powerful recommendation and searching system',
-                videoUrl: ''
+                videoUrl: '/showcases/PEPP/Recommendations.mp4'
             },
             {
                 title: "Users interaction",
-                videoUrl: ''
+                videoUrl: '/showcases/PEPP/Recommendations.mp4'
             }
         ]
     },

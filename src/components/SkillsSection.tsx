@@ -48,7 +48,7 @@ export default function SkillsSection() {
   return (
     <section
       id="skills"
-      className="py-12 bg-gradient-to-b from-background to-muted/20"
+      className="py-12 bg-gradient-to-b from-background to-muted/20 snap-start"
     >
       <div className="container max-w-4xl mx-auto px-6 md:px-4">
         <MotionWrapper>

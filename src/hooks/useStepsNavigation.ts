@@ -1,10 +1,9 @@
-import { useEffect, useRef } from 'react';
-import { useInView } from 'framer-motion';
-import { useSpring, useTransform, useMotionTemplate } from 'framer-motion';
+import {useEffect, useRef} from 'react';
+import {useInView, useMotionTemplate, useScroll, useSpring, useTransform} from 'framer-motion';
 
-export const useStepsNavigation = (scrollYProgress: any, step: number, showcasesLength: number) => {
-    const stepsRef = useRef<HTMLDivElement>(null);
-    const isInView = useInView(stepsRef);
+export const useStepsNavigation = (showcasesLength: number) => {
+    const showcasesScrollRef = useRef<HTMLDivElement>(null);
+    const isInView = useInView(showcasesScrollRef);
 
     useEffect(() => {
         const html = document.getElementsByTagName('html').item(0);
@@ -16,17 +15,22 @@ export const useStepsNavigation = (scrollYProgress: any, step: number, showcases
             }
         }
     }, [isInView]);
+    const {scrollYProgress} = useScroll({
+        target: showcasesScrollRef,
+        axis: 'y',
+        offset: ["start end", "end end"],
+    });
+    const stepsNavTransform = useTransform(scrollYProgress, [0, 1], [0, (1 / 3 * (showcasesLength ))]);
+    const stepsNavSpring = useSpring(stepsNavTransform, {stiffness: 400});
+    const stepsNavTranslate = useMotionTemplate`calc((2/3 - ${stepsNavSpring}) * 100%)`;
 
-    const stepsNavTransform = useTransform(
-        scrollYProgress,
-        [step * 2, 1],
-        [0, -(1 / 3 * (showcasesLength - 1))]
-    );
-    const stepsNavSpring = useSpring(stepsNavTransform, { stiffness: 400 });
-    const stepsNavTranslate = useMotionTemplate`calc((1/3 + ${stepsNavSpring}) * 100%)`;
+    const showcaseVideosTransform = useTransform(scrollYProgress, [0, 1], [0, showcasesLength]);
+    const showcaseVideosSpring = useSpring(showcaseVideosTransform, {stiffness: 400});
+    const showcaseVideosTranslate = useMotionTemplate`calc((1 - ${showcaseVideosSpring}) * 100%)`;
 
     return {
-        stepsRef,
-        stepsNavTranslate
+        showcasesScrollRef,
+        stepsNavTranslate,
+        showcaseVideosTranslate
     };
 }; 
