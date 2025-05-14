@@ -1,5 +1,5 @@
 import type {projects} from '@/lib/data';
-import {CardContent, CardFooter, CardHeader, CardTitle} from '@/shared/ui/card';
+import {CardContent, CardHeader, CardTitle} from '@/shared/ui/card';
 import {GlassCard} from '@/shared/ui/glass-card';
 import React from 'react';
 import {motion} from "framer-motion";
@@ -8,6 +8,10 @@ import {useElementSizes} from '@/hooks/useElementSizes';
 import {useContainersScrollAnimations} from '@/hooks/useContainersScrollAnimations.ts';
 import {useStepsNavigation} from '@/hooks/useStepsNavigation';
 import ShowcaseVideo from "@/components/ShowcaseVideo.tsx";
+import useIsMobile from "@/shared/hooks/useIsMobile.tsx";
+import ShowcasesNavLink, {showcaseIndexInView} from "@/components/ShowcasesNavLink.tsx";
+import {useStore} from "@nanostores/react";
+import {cn} from "@/lib/utils.ts";
 
 const Project = ({project}: {
     project: typeof projects[number]
@@ -26,25 +30,31 @@ const Project = ({project}: {
         descriptionTranslateAnimation,
         navTitlesTranslateAnimation,
         stepsSpring,
+        cardLinksAppearAnimation,
+        cardLinksDisappearAnimation
     } = useContainersScrollAnimations(descHeight, navHeight);
 
     const {
         showcasesScrollRef,
         stepsNavTranslate,
-        showcaseVideosTranslate
+        showcaseVideosTranslate,
+        scrollYProgress
     } = useStepsNavigation(project.showcases.length);
 
+    const isMobile = useIsMobile(1080)
+    const $showcaseIndexInView = useStore(showcaseIndexInView);
 
     return (
         <motion.div className='relative flex mx-auto overflow-clip ' style={{
             maxWidth: containerWidthAnimation,
         }}>
-            <div className='flex max-[1080px]:flex-col gap-4 w-full sticky top-22 h-fit'>
+            <div
+                className='flex items-center max-[1080px]:flex-col gap-4 w-full sticky top-22 bottom-2 h-[calc(100vh-7rem)]'>
                 <div
-                    className='h-fit min-w-96 w-96'
+                    className='h-fit min-w-96 w-96 max-[1080px]:w-full'
                 >
                     <GlassCard
-                        className="group hover:scale-105 overflow-hidden dark:border-purple-500/10 h-full flex flex-col">
+                        className="group origin-left hover:scale-105 overflow-hidden dark:border-purple-500/10 h-full flex flex-col">
                         <CardHeader className="bg-gradient-to-r from-purple-500/5 to-pink-500/5">
                             <CardTitle
                                 className="text-center md:text-left group-hover:text-purple-500 transition-colors duration-300 snap-start">
@@ -85,11 +95,10 @@ const Project = ({project}: {
                                         <ul className='flex flex-col gap-2'>
                                             {
                                                 project.showcases.map(({title}, index) => (
-                                                    <li key={index} className='cursor-pointer py-2'>
-                                                        <a href={`#${project.title}-${title.replace(/ /g, '-')}`}>
-                                                            {title}
-                                                        </a>
-                                                    </li>
+                                                    <ShowcasesNavLink key={index} title={title} index={index}
+                                                                      scrollYProgress={scrollYProgress}
+                                                                      totalAmount={project.showcases.length}
+                                                                      projectTitle={project.title}/>
                                                 ))
                                             }
                                         </ul>
@@ -98,8 +107,10 @@ const Project = ({project}: {
                             </motion.div>
 
                         </CardContent>
-                        <CardFooter
-                            className="flex flex-col justify-center md:justify-start items-center border-t border-border/30 bg-gradient-to-r from-purple-500/5 to-pink-500/5">
+                        <motion.div
+                            transition={{type: 'spring', stiffness: 400, damping: 30}}
+                            style={{height: isMobile ? cardLinksDisappearAnimation : undefined}}
+                            className="flex overflow-hidden origin-top-left flex-col justify-center md:justify-start items-center border-t border-border/30 bg-gradient-to-r from-purple-500/5 to-pink-500/5">
                             <motion.a
                                 href={project.github}
                                 target="_blank"
@@ -116,7 +127,7 @@ const Project = ({project}: {
                                 href={project.youtube}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="flex items-center text-sm text-muted-foreground hover:text-purple-500 transition-colors group/link pt-8"
+                                className="flex items-center mb-6 text-sm text-muted-foreground hover:text-purple-500 transition-colors group/link pt-8"
                                 whileHover={{scale: 1.05}}
                                 whileTap={{scale: 0.95}}
                             >
@@ -124,33 +135,42 @@ const Project = ({project}: {
                                     className="h-4 w-4 mr-2 group-hover/link:rotate-12 transition-transform duration-300"/>
                                 Showcase on Youtube 🔗
                             </motion.a>
-                        </CardFooter>
+                        </motion.div>
                     </GlassCard>
                 </div>
                 <motion.div
-                    className='overflow-clip rounded-2xl p-4 max-h-[calc(100vh-7rem)] grow flex flex-col project-container origin-top-left bg-gradient-to-r from-purple-500/5 to-pink-500/5'
+                    className='overflow-clip rounded-2xl p-4 grow flex flex-col w-full
+                    project-container origin-top-left bg-gradient-to-r from-purple-500/5 to-pink-500/5'
                     style={{
                         scale: stepsSpring
                     }}
                 >
-                    <nav className='w-full overflow-x-clip flex flex-col gap-4'>
-                        <motion.ul className='flex px-2 flex-nowrap max-[1080px]:hidden' style={{translateX: stepsNavTranslate}}>
+                    <nav className='h-full w-full overflow-x-clip flex flex-col gap-4'>
+                        <motion.ul className='flex px-2 flex-nowrap max-[1080px]:hidden'
+                                   style={{translateX: stepsNavTranslate}}>
                             {
                                 project.showcases.map((showcase, index) => (
-                                    <li key={index} className='relative min-w-1/3 w-1/3 max-w-1/3 overflow-hidden h-12'>
+                                    <li key={index} className='relative min-w-1/3 w-1/3 max-w-1/3 h-12'>
                                     <span
-                                        className='absolute px-3 w-full text-nowrap text-center overflow-hidden text-ellipsis'>
+                                        className={cn('absolute  transition-all bg-transparent text-xl px-3 py-1 w-full text-nowrap text-center overflow-hidden text-ellipsis',
+                                            {
+                                                'scale-125 shadow-sm rounded-xs translate-y-2 bg-background z-10': $showcaseIndexInView === index,
+                                            }
+                                        )}>
                                         {showcase.title}
                                     </span>
                                     </li>
                                 ))
                             }
                         </motion.ul>
-                        <motion.ul className='flex flex-nowrap grow' style={{translateX: showcaseVideosTranslate}}>
+                        <motion.ul className='h-full w-full flex flex-nowrap'
+                                   style={{translateX: showcaseVideosTranslate}}>
                             {
                                 project.showcases.map((showcase, index) => (
-                                    <li key={index} className='min-w-full px-3'>
-                                        <ShowcaseVideo href={showcase.videoUrl}/>
+                                    <li key={index} className='relative min-w-full min-h-full'>
+                                        <div className='max-[1080px]:absolute inset-0 p-3 '>
+                                            <ShowcaseVideo href={showcase.videoUrl}/>
+                                        </div>
                                     </li>
                                 ))
                             }
@@ -161,7 +181,7 @@ const Project = ({project}: {
 
             <div aria-hidden className='flex opacity-0 w-0'>
                 <div className='grow w-[1px] flex flex-col'>
-                    <div className='h-[65vh] snap-end '/>
+                    <div className='h-[78vh] snap-end '/>
                     <div className='flex'>
                         <div className='h-[10vh]' ref={containersAnimationOffsetRef}/>
                         <div className='' ref={showcasesScrollRef}>

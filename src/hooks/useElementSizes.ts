@@ -10,18 +10,18 @@ export const useElementSizes = () => {
     useEffect(() => {
         const getPixels = () => {
             if (descRef.current) {
-                setDescHeight(descRef.current.getBoundingClientRect().height);
+                setDescHeight(descRef.current.clientHeight);
             }
             if (navRef.current) {
-                setNavHeight(navRef.current.getBoundingClientRect().height);
+                setNavHeight(navRef.current.clientHeight);
             }
         }
         getPixels()
-        document.body.addEventListener('resize', getPixels)
+        window.addEventListener('resize', getPixels)
         return () => {
-            document.body.removeEventListener('resize', getPixels)
+            window.removeEventListener('resize', getPixels)
         }
-    }, []);
+    }, [descRef, navRef]);
 
     return {
         descHeight,

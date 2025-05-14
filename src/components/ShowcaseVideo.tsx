@@ -22,7 +22,7 @@ const ShowcaseVideo = ({href}: {href: string}) => {
         }
     }, [isIntersecting])
     return (
-        <video  className="rounded-2xl" ref={videoRef} muted loop playsInline onEnded={onTryToPlay}>
+        <video className="rounded-2xl max-h-full mx-auto"  ref={videoRef} muted loop playsInline onEnded={onTryToPlay}>
             <source src={href} type="video/mp4"/>
             App interface preview
         </video>

@@ -17,6 +17,10 @@ export const useContainersScrollAnimations = (descHeight: number, navHeight: num
     const infoCardHeightTransform = useTransform(scrollYProgress, [0, 1], [descHeight, navHeight]);
     const infoCardHeightAnimation = useSpring(infoCardHeightTransform, {stiffness: 400});
 
+    const cardLinksAppearAnimation = useSpring(scrollYProgress, {stiffness: 400});
+
+    const cardLinksDisappearAnimation = useTransform(scrollYProgress, [0, 1], [128, 0]);
+
     const descriptionTransform = useTransform(scrollYProgress, [0, 1], [swing, descHeight + swing]);
     const descriptionSpring = useSpring(descriptionTransform, {stiffness: 400});
     const descriptionTranslateAnimation = useMotionTemplate`translateY(calc(-${descriptionSpring}px + ${swing}px))`;
@@ -35,6 +39,7 @@ export const useContainersScrollAnimations = (descHeight: number, navHeight: num
         descriptionTranslateAnimation,
         navTitlesTranslateAnimation,
         stepsSpring,
-        scrollYProgress
+        cardLinksAppearAnimation,
+        cardLinksDisappearAnimation
     };
 }; 

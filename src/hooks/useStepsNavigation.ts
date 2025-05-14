@@ -1,5 +1,6 @@
 import {useEffect, useRef} from 'react';
 import {useInView, useMotionTemplate, useScroll, useSpring, useTransform} from 'framer-motion';
+import useIsMobile from "@/shared/hooks/useIsMobile.tsx";
 
 export const useStepsNavigation = (showcasesLength: number) => {
     const showcasesScrollRef = useRef<HTMLDivElement>(null);
@@ -28,9 +29,11 @@ export const useStepsNavigation = (showcasesLength: number) => {
     const showcaseVideosSpring = useSpring(showcaseVideosTransform, {stiffness: 400});
     const showcaseVideosTranslate = useMotionTemplate`calc((1 - ${showcaseVideosSpring}) * 100%)`;
 
+
     return {
         showcasesScrollRef,
         stepsNavTranslate,
-        showcaseVideosTranslate
+        showcaseVideosTranslate,
+        scrollYProgress
     };
 }; 
