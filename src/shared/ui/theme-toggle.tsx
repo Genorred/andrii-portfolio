@@ -1,19 +1,20 @@
 import {Moon, Sun} from "lucide-react";
 import {Button} from "./button.tsx";
-import {useEffect, useState} from "react";
+import {useEffect} from "react";
+import {atom} from "nanostores";
+import {useStore} from "@nanostores/react";
 
+
+export const isDark = atom(false);
 export default function ThemeToggle() {
-    const [isDark, setIsDark] = useState<boolean>(false)
-
+    const $isDark = useStore(isDark);
     useEffect(() => {
-        const isDark = document.documentElement.classList.contains("dark");
-        setIsDark(isDark);
+        isDark.set(document.documentElement.classList.contains("dark"));
     }, []);
 
     const toggleTheme = () => {
-        const isDark = document.documentElement.classList.contains("dark");
         document.documentElement.classList.toggle("dark");
-        setIsDark(!isDark);
+        isDark.set(!document.documentElement.classList.contains("dark"));
     };
 
     return (
@@ -23,7 +24,7 @@ export default function ThemeToggle() {
             onClick={toggleTheme}
             className="rounded-full cursor-pointer"
         >
-            {isDark ? (
+            {$isDark ? (
                 <Sun className="h-5 w-5"/>
             ) : (
                 <Moon className="h-5 w-5"/>
