@@ -154,7 +154,7 @@ const Project = ({project}: {
                                     <span
                                         className={cn('absolute  transition-all bg-transparent text-xl px-3 py-1 w-full text-nowrap text-center overflow-hidden text-ellipsis',
                                             {
-                                                'scale-125 shadow-sm rounded-xs translate-y-2 bg-background z-10': $showcaseIndexInView === index,
+                                                'scale-125 bg-background/70 px-4 py-2 rounded-lg font-medium shadow-lg translate-y-2 z-10': $showcaseIndexInView === index,
                                             }
                                         )}>
                                         {showcase.title}

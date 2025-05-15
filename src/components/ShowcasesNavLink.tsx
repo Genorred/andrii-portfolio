@@ -29,11 +29,12 @@ const ShowcaseNavLink = ({projectTitle, title, index, scrollYProgress, totalAmou
     });
 
     const $isDark = useStore(isDark);
+    console.log($isDark)
     const lightness = useTransform(difference, (diff) => {
         if ($isDark) {
-            return 100 - Math.pow(diff, 3) * 37.27;
+            return 100 - Math.pow(diff, 2) * 37.27;
         } else {
-            return Math.pow(diff, 3) * 63.73;
+            return Math.pow(diff, 4) * 63.73;
         }
     });
 

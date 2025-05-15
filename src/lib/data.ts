@@ -16,13 +16,6 @@ export const workExperience = [
         period: "May 2024 - August 2024",
         achievements: [
             "Created the core functionality and helped to release in time",
-            "Created the core functionality and helped to release in time",
-            "Created the core functionality and helped to release in time",
-            "Created the core functionality and helped to release in time",
-            "Created the core functionality and helped to release in time",
-            "Created the core functionality and helped to release in time",
-            "Created the core functionality and helped to release in time",
-            "Created the core functionality and helped to release in time",
             "Made responsive UI of majority of pages",
         ],
     },
@@ -56,9 +49,10 @@ export const skills = {
         "Tailwind CSS",
         "HTML",
         "CSS",
+        "Motion"
     ],
     backendDevelopment: ["Nodejs", "Expressjs", "Nestjs", "GraphQL", "RabbitMQ"],
-    databaseAndStorage: ["PostgreSQL", "Prisma (ORM)", "Elasticsearch", "Redis"],
+    databaseAndStorage: ["PostgreSQL", "Prisma (ORM)", "Elasticsearch", "Redis", "Firebase"],
     cloudAndDevOps: ["Docker"],
     toolsAndServices: [
         "Zod",
@@ -105,7 +99,7 @@ export const projects: {
             },
             {
                 title: "Users interaction",
-                videoUrl: '/showcases/PEPP/Recommendations.mp4'
+                videoUrl: '/showcases/PEPP/UserInteractions.mp4'
             }
         ]
     },

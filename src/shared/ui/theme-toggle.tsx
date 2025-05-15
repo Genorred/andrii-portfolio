@@ -13,8 +13,8 @@ export default function ThemeToggle() {
     }, []);
 
     const toggleTheme = () => {
-        document.documentElement.classList.toggle("dark");
         isDark.set(!document.documentElement.classList.contains("dark"));
+        document.documentElement.classList.toggle("dark");
     };
 
     return (
