@@ -195,7 +195,7 @@ const Project = ({project}: {
                         </div>
                     </div>
                 </div>
-                <div className='h-[20vh]'/>
+                {/*<div className='h-[20vh]'/>*/}
             </div>
 
         </motion.div>
