@@ -25,7 +25,7 @@ export default function AwardsSection() {
                 <div className="flex items-center mb-2">
                   <motion.div
                     whileHover={{ rotate: 20 }}
-                    transition={{ type: "spring", stiffness: 500 }}
+                    // transition={{ type: "spring", stiffness: 500 }}
                     className="flex items-center justify-center bg-gradient-to-r from-amber-500 to-yellow-500 rounded-full p-1.5 mr-2"
                   >
                     <Trophy className="h-4 w-4 text-white" />

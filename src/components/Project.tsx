@@ -108,7 +108,7 @@ const Project = ({project}: {
 
                         </CardContent>
                         <motion.div
-                            transition={{type: 'spring', stiffness: 400, damping: 30}}
+                            // transition={{type: 'spring', stiffness: 400, damping: 30}}
                             style={{height: isMobile ? cardLinksDisappearAnimation : undefined}}
                             className="flex overflow-hidden origin-top-left flex-col justify-center md:justify-start items-center border-t border-border/30 bg-gradient-to-r from-purple-500/5 to-pink-500/5">
                             <motion.a
@@ -140,7 +140,7 @@ const Project = ({project}: {
                 </div>
                 <motion.div
                     className='overflow-clip rounded-2xl p-4 grow flex flex-col w-full
-                    project-container origin-top-left bg-gradient-to-r from-purple-500/5 to-pink-500/5'
+                    project-container origin-center bg-gradient-to-r from-purple-500/5 to-pink-500/5'
                     style={{
                         scale: stepsSpring
                     }}

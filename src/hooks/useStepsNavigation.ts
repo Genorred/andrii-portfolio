@@ -22,11 +22,11 @@ export const useStepsNavigation = (showcasesLength: number) => {
         offset: ["start end", "end end"],
     });
     const stepsNavTransform = useTransform(scrollYProgress, [0, 1], [0, (1 / 3 * (showcasesLength ))]);
-    const stepsNavSpring = useSpring(stepsNavTransform, {stiffness: 400});
+    const stepsNavSpring = stepsNavTransform;
     const stepsNavTranslate = useMotionTemplate`calc((2/3 - ${stepsNavSpring}) * 100%)`;
 
     const showcaseVideosTransform = useTransform(scrollYProgress, [0, 1], [0, showcasesLength]);
-    const showcaseVideosSpring = useSpring(showcaseVideosTransform, {stiffness: 400});
+    const showcaseVideosSpring = showcaseVideosTransform;
     const showcaseVideosTranslate = useMotionTemplate`calc((1 - ${showcaseVideosSpring}) * 100%)`;
 
 

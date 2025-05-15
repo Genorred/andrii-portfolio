@@ -10,7 +10,7 @@ function SkillTag({ skill, index }: { skill: string; index: number }) {
       initial={{ opacity: 0, scale: 0.8 }}
       whileInView={{ opacity: 1, scale: 1 }}
       transition={{
-        type: "spring",
+        // type: "spring",
         stiffness: 260,
         damping: 20,
         delay: 0.05 * index,

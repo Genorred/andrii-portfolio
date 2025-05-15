@@ -33,7 +33,7 @@ export default function TimelineItem({
           initial={{ scale: 0 }}
           whileInView={{ scale: 1 }}
           transition={{
-            type: "spring",
+            // type: "spring",
             stiffness: 300,
             damping: 15,
             delay: index * 0.2 + 0.2,

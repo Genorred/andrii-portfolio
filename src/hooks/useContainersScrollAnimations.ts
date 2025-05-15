@@ -12,25 +12,25 @@ export const useContainersScrollAnimations = (descHeight: number, navHeight: num
     });
 
     const containerWidthTransform = useTransform(scrollYProgress, [0, 1], ['864px', '1280px']);
-    const containerWidthAnimation = useSpring(containerWidthTransform, {stiffness: 400});
+    const containerWidthAnimation = containerWidthTransform;
 
     const infoCardHeightTransform = useTransform(scrollYProgress, [0, 1], [descHeight, navHeight]);
-    const infoCardHeightAnimation = useSpring(infoCardHeightTransform, {stiffness: 400});
+    const infoCardHeightAnimation = infoCardHeightTransform;
 
-    const cardLinksAppearAnimation = useSpring(scrollYProgress, {stiffness: 400});
+    const cardLinksAppearAnimation = scrollYProgress;
 
     const cardLinksDisappearAnimation = useTransform(scrollYProgress, [0, 1], [128, 0]);
 
     const descriptionTransform = useTransform(scrollYProgress, [0, 1], [swing, descHeight + swing]);
-    const descriptionSpring = useSpring(descriptionTransform, {stiffness: 400});
+    const descriptionSpring = descriptionTransform;
     const descriptionTranslateAnimation = useMotionTemplate`translateY(calc(-${descriptionSpring}px + ${swing}px))`;
 
     const navTitlesTransform = useTransform(scrollYProgress, [0, 1], [swing, descHeight + swing]);
-    const navTitlesSpring = useSpring(navTitlesTransform, {stiffness: 400});
+    const navTitlesSpring = navTitlesTransform;
     const navTitlesTranslateAnimation = useMotionTemplate`translateY(calc(-${navTitlesSpring}px + ${swing}px))`;
 
     const stepsTransition = useTransform(scrollYProgress, [0, 1], [0, 1]);
-    const stepsSpring = useSpring(stepsTransition, {stiffness: 400});
+    const stepsSpring = stepsTransition;
 
     return {
         containersAnimationOffsetRef,
