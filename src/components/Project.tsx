@@ -181,7 +181,7 @@ const Project = ({project}: {
 
             <div aria-hidden className='flex opacity-0 w-0'>
                 <div className='grow w-[1px] flex flex-col'>
-                    <div className='h-[78vh] snap-end '/>
+                    <div className='h-[78vh] snap-start '/>
                     <div className='flex'>
                         <div className='h-[10vh]' ref={containersAnimationOffsetRef}/>
                         <div className='' ref={showcasesScrollRef}>
