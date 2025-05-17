@@ -45,7 +45,7 @@ const Project = ({project}: {
     const $showcaseIndexInView = useStore(showcaseIndexInView);
 
     return (
-        <motion.div className='relative flex mx-auto overflow-clip ' style={{
+        <motion.div className='relative flex mx-auto overflow-clip  will-change-[max-width]' style={{
             maxWidth: containerWidthAnimation,
         }}>
             <div
@@ -62,7 +62,7 @@ const Project = ({project}: {
                             </CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <motion.div className='overflow-hidden' style={{
+                            <motion.div className='overflow-hidden will-change-[height]' style={{
                                 height: infoCardHeightAnimation
                             }}>
                                 <motion.div
@@ -110,7 +110,7 @@ const Project = ({project}: {
                         <motion.div
                             // transition={{type: 'spring', stiffness: 400, damping: 30}}
                             style={{height: isMobile ? cardLinksDisappearAnimation : undefined}}
-                            className="flex overflow-hidden origin-top-left flex-col justify-center md:justify-start items-center border-t border-border/30 bg-gradient-to-r from-purple-500/5 to-pink-500/5">
+                            className="flex will-change-[height] overflow-hidden origin-top-left flex-col justify-center md:justify-start items-center border-t border-border/30 bg-gradient-to-r from-purple-500/5 to-pink-500/5">
                             <motion.a
                                 href={project.github}
                                 target="_blank"
@@ -140,13 +140,13 @@ const Project = ({project}: {
                 </div>
                 <motion.div
                     className='overflow-clip rounded-2xl p-4 grow flex flex-col w-full
-                    project-container origin-center bg-gradient-to-r from-purple-500/5 to-pink-500/5'
+                    project-container origin-center bg-gradient-to-r from-purple-500/5 to-pink-500/5 will-change-transform'
                     style={{
                         scale: stepsSpring
                     }}
                 >
                     <nav className='h-full w-full overflow-x-clip flex flex-col gap-4'>
-                        <motion.ul className='flex px-2 flex-nowrap max-[1080px]:hidden'
+                        <motion.ul className='flex px-2 flex-nowrap max-[1080px]:hidden will-change-transform'
                                    style={{translateX: stepsNavTranslate}}>
                             {
                                 project.showcases.map((showcase, index) => (
@@ -163,7 +163,7 @@ const Project = ({project}: {
                                 ))
                             }
                         </motion.ul>
-                        <motion.ul className='h-full w-full flex flex-nowrap'
+                        <motion.ul className='h-full w-full flex flex-nowrap will-change-transform'
                                    style={{translateX: showcaseVideosTranslate}}>
                             {
                                 project.showcases.map((showcase, index) => (
@@ -181,7 +181,7 @@ const Project = ({project}: {
 
             <div aria-hidden className='flex opacity-0 w-0'>
                 <div className='grow w-[1px] flex flex-col'>
-                    <div className='h-[78vh] snap-end '/>
+                    <div className='h-[78vh] '/>
                     <div className='flex'>
                         <div className='h-[10vh]' ref={containersAnimationOffsetRef}/>
                         <div className='' ref={showcasesScrollRef}>
