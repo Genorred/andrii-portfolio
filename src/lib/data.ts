@@ -1,7 +1,7 @@
 export const personalInfo = {
-    name: "Mykhailo H",
+    name: "Andrii H",
     location: "Odessa, Ukraine",
-    email: "gmihasik@gmail.com",
+    email: "genorred@gmail.com",
     github: "https://github.com/Genorred",
     // linkedin: "https://www.linkedin.com/in/rishikeshs/",
 } as const;
@@ -45,14 +45,18 @@ export const skills = {
         "Reactjs",
         "Redux",
         "Zustand",
+        "React hook form",
+        "Zod",
+        "TanStack Query",
         "Shadcn UI",
         "Tailwind CSS",
         "HTML",
         "CSS",
-        "Motion"
+        "Motion",
+        "CSS modules",
     ],
-    backendDevelopment: ["Nodejs", "Expressjs", "Nestjs", "GraphQL", "RabbitMQ"],
-    databaseAndStorage: ["PostgreSQL", "Prisma (ORM)", "Elasticsearch", "Redis", "Firebase"],
+    backendDevelopment: ["Nodejs", "Expressjs", "Nestjs", "GraphQL", "RabbitMQ", "Mongoose", "Sequalize"],
+    databaseAndStorage: ["PostgreSQL", "Prisma (ORM)", "Elasticsearch", "Redis", "Firebase", "MongoDB"],
     cloudAndDevOps: ["Docker"],
     toolsAndServices: [
         "Zod",
